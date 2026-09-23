@@ -9,6 +9,7 @@
     {
       id: "verbs",
       page: "verb-conjugation-stamp.html",
+      minimalPage: "minimal-verb.html",
       initialView: "rules",
       titleLines: ["日语动词变形表", "· 印谱方格"],
       seal: "動",

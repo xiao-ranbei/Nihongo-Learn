@@ -4,6 +4,14 @@
  * 通过 <html data-theme="..."> 切换，页面 <style> 全部引用 var(--*) 同步变色。
  */
 
+@font-face {
+  font-family: "LXGW ZhenKai GB";
+  src: url("../font/LXGWZhenKaiGB-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* 纸面与墨色 */
   --paper: #f6f3ee;
@@ -41,8 +49,8 @@
   /* 排版 */
   --radius: 9px;
   --radius-small: 4px;
-  --display: "Noto Serif SC", "Yu Mincho", "Hiragino Mincho ProN", serif;
-  --sans: "Segoe UI", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --display: "LXGW ZhenKai GB", "Noto Serif SC", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  --sans: "LXGW ZhenKai GB", "Segoe UI", "Noto Sans SC", "Microsoft YaHei", sans-serif;
   --mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
 }
 

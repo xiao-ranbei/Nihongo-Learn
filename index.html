@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/themes.css">
   <script src="js/theme-manager.js"></script>
+  <script>
+    // 尽早应用极简模式状态，避免首屏样式闪烁
+    (function () {
+      try {
+        if (localStorage.getItem("nihongo-minimal-mode") === "on") {
+          document.documentElement.setAttribute("data-minimal", "on");
+        }
+      } catch (error) { /* 忽略 */ }
+    })();
+  </script>
   <meta name="color-scheme" content="light">
   <meta name="description" content="日语学习・印谱方格：用清晰的表格、规则卡片和练习整理日语活用。">
   <title>日语学习・印谱方格</title>
@@ -23,6 +33,7 @@
       min-width: 320px;
       margin: 0;
       color: var(--ink);
+      font-family: var(--sans);
       background:
         radial-gradient(circle at 91% 2%, rgba(var(--vermilion-rgb), .12), transparent 18rem),
         radial-gradient(circle at 3% 94%, rgba(var(--accent-rgb), .06), transparent 22rem),
@@ -381,6 +392,134 @@
         transition-duration: .01ms !important;
       }
     }
+
+    /* ── 极简模式开关 ─────────────────────────── */
+    .heading-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .minimal-toggle {
+      padding: 6px 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 2px;
+      color: var(--ink);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: .74rem;
+      font-weight: 900;
+      white-space: nowrap;
+      transition: border-color .2s ease, color .2s ease, background-color .2s ease;
+    }
+
+    .minimal-toggle:hover {
+      border-color: var(--vermilion);
+      color: var(--vermilion-deep);
+    }
+
+    .minimal-toggle[aria-pressed="true"] {
+      color: var(--vermilion);
+      background: var(--surface);
+      border-color: var(--vermilion);
+      box-shadow: inset 0 -2px 0 var(--vermilion);
+    }
+
+    /* ── 极简模式：黑白高对比覆盖 ─────────────── */
+    :root[data-minimal="on"] {
+      --paper: #ffffff;
+      --surface: #ffffff;
+      --surface-strong: #ffffff;
+      --ink: #000000;
+      --muted: #3d3d3d;
+      --line: #8a8a8a;
+      --line-strong: #000000;
+      --vermilion: #0065ff;
+      --vermilion-rgb: 0, 101, 255;
+      --vermilion-deep: #0046b3;
+      --vermilion-deep-rgb: 0, 70, 179;
+      --vermilion-soft: rgba(0, 101, 255, .08);
+      --accent-muted: #0065ff;
+      --accent-rgb: 0, 101, 255;
+      --wash: #ffffff;
+      --wash-hover: rgba(0, 101, 255, .08);
+      --shadow: none;
+      --shadow-small: none;
+      --radius: 0px;
+      --radius-small: 0px;
+      --surface-rgb: 255, 255, 255;
+    }
+
+    :root[data-minimal="on"] body {
+      background: var(--paper);
+    }
+
+    :root[data-minimal="on"] body::before {
+      display: none;
+    }
+
+    :root[data-minimal="on"] .page-heading,
+    :root[data-minimal="on"] .home-shell {
+      border-width: 1px;
+      border-color: var(--line-strong);
+      box-shadow: none;
+      background: var(--surface);
+    }
+
+    :root[data-minimal="on"] .page-heading::after,
+    :root[data-minimal="on"] .home-shell::before {
+      display: none;
+    }
+
+    :root[data-minimal="on"] .page-heading-mark {
+      border-width: 1px;
+      border-color: var(--vermilion);
+      box-shadow: none;
+      background: var(--surface);
+      color: var(--vermilion-deep);
+      transform: none;
+    }
+
+    :root[data-minimal="on"] .module-card {
+      border-width: 1px;
+      border-color: var(--line-strong);
+      border-radius: 0;
+      background: var(--surface);
+    }
+
+    :root[data-minimal="on"] a.module-card:hover {
+      border-color: var(--vermilion);
+      background-color: var(--vermilion-soft);
+      box-shadow: none;
+      transform: none;
+    }
+
+    :root[data-minimal="on"] .module-seal {
+      border-width: 1px;
+      border-color: var(--vermilion);
+      box-shadow: none;
+      background: var(--surface);
+      color: var(--vermilion-deep);
+      transform: none;
+    }
+
+    :root[data-minimal="on"] .home-note {
+      border-width: 1px;
+      box-shadow: none;
+      background: var(--surface);
+    }
+
+    :root[data-minimal="on"] .page-heading h1,
+    :root[data-minimal="on"] .section-heading h2,
+    :root[data-minimal="on"] .module-card h3,
+    :root[data-minimal="on"] .home-note strong {
+      color: var(--vermilion-deep);
+    }
+
+    :root[data-minimal="on"] .theme-switcher {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -392,7 +531,9 @@
         <p>把日语规则整理成可读、可查、可练的学习页。先选一个规则领域，再从规则理解走到即时回忆。</p>
       </div>
       <div class="page-heading-mark" aria-hidden="true">学</div>
-      <div class="theme-switcher">
+      <div class="heading-tools">
+        <button class="minimal-toggle" type="button" data-action="toggle-minimal" aria-pressed="false">极简模式</button>
+        <div class="theme-switcher">
         <button class="theme-switcher-button" type="button" data-action="toggle-theme-panel"
           aria-expanded="false" aria-haspopup="true">
           <span class="theme-swatch" style="background: var(--vermilion)"></span>主题
@@ -413,6 +554,7 @@
           <button class="theme-option" type="button" role="menuitemradio" data-action="select-theme" data-theme-id="fuji" aria-pressed="false">
             <span class="theme-swatch" style="background: #8a72ab"></span>藤棚・藤紫
           </button>
+        </div>
         </div>
       </div>
     </header>
@@ -441,6 +583,11 @@
   <script>
     // 首页主题切换（静态页，无 appShell 事件委托）
     document.addEventListener("click", function (event) {
+      var minimalToggle = event.target.closest("[data-action='toggle-minimal']");
+      if (minimalToggle) {
+        applyMinimalMode(document.documentElement.getAttribute("data-minimal") !== "on");
+        return;
+      }
       var toggle = event.target.closest("[data-action='toggle-theme-panel']");
       if (toggle) {
         var switcher = toggle.closest(".theme-switcher");
@@ -516,6 +663,26 @@
       var seal = document.querySelector(".page-heading-mark");
       if (seal) seal.textContent = hl.seal;
     }
+    // 极简模式：黑白高对比，开启时入口指向极简页，状态存入 localStorage 跨页记忆
+    function applyMinimalMode(on) {
+      document.documentElement.setAttribute("data-minimal", on ? "on" : "off");
+      var toggle = document.querySelector("[data-action='toggle-minimal']");
+      if (toggle) {
+        toggle.setAttribute("aria-pressed", String(on));
+      }
+      try {
+        localStorage.setItem("nihongo-minimal-mode", on ? "on" : "off");
+      } catch (error) { /* 忽略 */ }
+      if (window.NihongoModuleCatalog && typeof window.NihongoModuleCatalog.render === "function") {
+        window.NihongoModuleCatalog.render();
+      }
+    }
+    var minimalSaved = false;
+    try {
+      minimalSaved = localStorage.getItem("nihongo-minimal-mode") === "on";
+    } catch (error) { /* 忽略 */ }
+    applyMinimalMode(minimalSaved);
+
     window.NihongoTheme.init();
     window.NihongoTheme.updateSwitcher();
     applyThemeHeadline();

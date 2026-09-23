@@ -10,7 +10,14 @@
       .replace(/"/g, "&quot;");
   }
 
+  function isMinimalMode() {
+    return document.documentElement.getAttribute("data-minimal") === "on";
+  }
+
   function getModuleHref(module) {
+    if (isMinimalMode() && typeof module.minimalPage === "string" && module.minimalPage.trim()) {
+      return module.minimalPage;
+    }
     if (!module.page || !module.initialView) {
       return "";
     }
